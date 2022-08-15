@@ -14,6 +14,7 @@
     <div>
       全选<input type="checkbox" v-model="alldone" />
       <span> {{ active }} / {{ all }} </span>
+      ss
     </div>
   </div>
 </template>
