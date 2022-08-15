@@ -20,20 +20,26 @@
 </template>
 
 <script setup>
-import { ref, computed } from "vue";
+import { ref, computed, watchEffect } from "vue";
+
 
 let count = ref(1);
 
-
-let {title, todos, addTodo, clear, all, active,  alldone} = useTodos();
-
-
-
-
+let { title, todos, addTodo, clear, all, active, alldone } = useTodos();
 
 function useTodos() {
   let title = ref("");
-  let todos = ref([{ title: "学习vue", done: false }]);
+  // let todos = ref([{ title: "学习vue", done: false }]);
+  // let todos = ref(JSON.parse(localStorage.getItem("todos") || "[]"));
+
+  // let todos = ref([]);
+
+  // debugger
+  // watchEffect(() => {
+  //   localStorage.setItem("todos", JSON.stringify(todos.value));
+  // });
+
+  let todos = useStorage("todos", '[]');
 
   function addTodo() {
     todos.value.push({
@@ -55,7 +61,16 @@ function useTodos() {
 
   let alldone = 1;
 
-  return { title, todos, addTodo, clear, all, active,  alldone};
+  return { title, todos, addTodo, clear, all, active, alldone };
+}
+
+function useStorage(name, value = []) {
+  let data = ref(JSON.parse(localStorage.getItem(name) || '[]'));
+  watchEffect(() => {
+    localStorage.setItem(name, JSON.stringify(data.value));
+  });
+
+  return data;
 }
 </script>
 
